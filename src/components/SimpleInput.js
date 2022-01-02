@@ -1,41 +1,38 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import useInput from '../hooks/use-input';
 
 const SimpleInput = (props) => {
 
-  const { 
+  const {
     value: enteredName,
     isValid: enteredNameIsValid,
-    hasError: nameInputHasError, 
-    valueChangeHandler: nameChagedHandler, 
-    inputBlurHandler: nameBlurHandler, 
+    hasError: nameInputHasError,
+    valueChangeHandler: nameChagedHandler,
+    inputBlurHandler: nameBlurHandler,
     reset: resetNameInput
   } = useInput(value => value.trim() !== '');
 
-  // const [enteredName, setEnteredName] = useState('');
-  const [enteredEmail, setEnteredEmail] = useState('');
-
-
-  // const enteredNameIsValid = enteredName.trim() !== '';
-  const emailCheck = enteredEmail => {
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangedHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmailInput
+  } = useInput(enteredEmail => {
     const emailFilter = enteredEmail
       .toString()
       .toLowerCase()
       .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
 
     if (emailFilter === null) {
       return false;
     }
 
     return true;
-  };
-
-  const enteredEmailIsValid = emailCheck(enteredEmail);
-
-  // const [enteredNameTouched, setEnteredNameTouched] = useState(false);
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
+  });
 
   let formIsValid = false;
 
@@ -45,35 +42,11 @@ const SimpleInput = (props) => {
     formIsValid = false;
   }
 
-  // const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
-  const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
-
-
   console.log(`Typed name: ${enteredName}`);
   console.log(`Typed email: ${enteredEmail}`);
 
-  // const nameInputChangeHandler = event => {
-  //   setEnteredName(event.target.value);
-  // };
-
-  const emailInputChangeHandler = event => {
-    setEnteredEmail(event.target.value);
-  };
-
-  // const nameInputBlurHandler = event => {
-  //   setEnteredNameTouched(true);
-  // };
-
-  const emailInputBlurHandler = event => {
-    setEnteredEmailTouched(true);
-  };
-
-
   const formSubmissionHandler = event => {
     event.preventDefault();
-
-    // setEnteredNameTouched(true);
-    setEnteredEmailTouched(true);
 
     if (!formIsValid) {
       return;
@@ -82,16 +55,12 @@ const SimpleInput = (props) => {
     console.log(`Submitted name is ${enteredName}.`);
     console.log(`Submitted email is ${enteredEmail}.`);
 
-    // setEnteredName('');
     resetNameInput();
-    setEnteredEmail('');
-
-    // setEnteredNameTouched(false);
-    setEnteredEmailTouched(false);
+    resetEmailInput();
   }
 
   const nameInputClasses = nameInputHasError ? 'form-control invalid' : 'form-control';
-  const emailInputClasses = emailInputIsInvalid ? 'form-control invalid' : 'form-control';
+  const emailInputClasses = emailInputHasError ? 'form-control invalid' : 'form-control';
 
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -109,14 +78,14 @@ const SimpleInput = (props) => {
 
       <div className={emailInputClasses}>
         <label htmlFor='email'>Your Email</label>
-        <input 
-          type='text' 
+        <input
+          type='text'
           id='email'
-          onChange={emailInputChangeHandler}
-          onBlur={emailInputBlurHandler}
+          onChange={emailChangedHandler}
+          onBlur={emailBlurHandler}
           value={enteredEmail}
         />
-        {emailInputIsInvalid && <p className="error-text">Please enter a valid email!</p>}
+        {emailInputHasError && <p className="error-text">Please enter a valid email!</p>}
       </div>
       <div className="form-actions">
         {/* <button disabled={!formIsValid}>Submit</button> */}

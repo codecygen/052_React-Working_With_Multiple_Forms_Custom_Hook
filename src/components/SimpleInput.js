@@ -10,7 +10,7 @@ const SimpleInput = (props) => {
     valueChangeHandler: nameChagedHandler,
     inputBlurHandler: nameBlurHandler,
     reset: resetNameInput
-  } = useInput(value => value.trim() !== '');
+  } = useInput(enteredName => enteredName.trim() !== '');
 
   const {
     value: enteredEmail,
@@ -34,19 +34,21 @@ const SimpleInput = (props) => {
     return true;
   });
 
-  let formIsValid = false;
 
-  if (enteredNameIsValid && enteredEmailIsValid) {
-    formIsValid = true;
-  } else {
-    formIsValid = false;
-  }
 
   console.log(`Typed name: ${enteredName}`);
   console.log(`Typed email: ${enteredEmail}`);
 
   const formSubmissionHandler = event => {
     event.preventDefault();
+
+    let formIsValid = false;
+
+    if (enteredNameIsValid && enteredEmailIsValid) {
+      formIsValid = true;
+    } else {
+      formIsValid = false;
+    }
 
     if (!formIsValid) {
       return;

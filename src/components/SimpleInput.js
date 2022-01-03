@@ -10,7 +10,7 @@ const SimpleInput = (props) => {
     valueChangeHandler: nameChagedHandler,
     inputBlurHandler: nameBlurHandler,
     reset: resetNameInput
-  } = useInput(enteredName => enteredName.trim() !== '');
+  } = useInput(x => x.trim() !== '');
 
   const {
     value: enteredEmail,
@@ -19,8 +19,8 @@ const SimpleInput = (props) => {
     valueChangeHandler: emailChangedHandler,
     inputBlurHandler: emailBlurHandler,
     reset: resetEmailInput
-  } = useInput(enteredEmail => {
-    const emailFilter = enteredEmail
+  } = useInput(y => {
+    const emailFilter = y
       .toString()
       .toLowerCase()
       .match(
